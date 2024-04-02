@@ -7,7 +7,7 @@ namespace Core.Specifications
   {
     public ProductsWithTypesAndBrandsSpecification(ProductSpecParams @params) :
       base(
-        x => (string.IsNullOrEmpty(@params.Search) || x.Name.Contains(@params.Search, StringComparison.CurrentCultureIgnoreCase)) &&
+        x => (string.IsNullOrEmpty(@params.Search) || x.Name.ToLower().Contains(@params.Search.ToLower())) &&
         (!@params.BrandId.HasValue || x.ProductBrandId == @params.BrandId) &&
         (!@params.TypeId.HasValue || x.ProductTypeId == @params.TypeId))
     {
