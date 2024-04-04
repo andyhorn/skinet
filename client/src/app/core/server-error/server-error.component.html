@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <h4>Internal Server Error</h4>
+  <p>Refreshing the page will make the error disappear!</p>
+  <ng-container *ngIf="error">
+    <h5 class="text-danger">Error: {{error.message}}</h5>
+    <p class="font-weight-bold">
+      This error came from the server - not Angular.
+    </p>
+    <p>
+      What to do next?
+    </p>
+    <ol>
+      <li>Check the network tab in your browser's dev tools</li>
+      <li>Reproduce the request in Postman - if the same error occurs, then it is on the server and <i>definitely</i> not Angular</li>
+    </ol>
+    <h5>Stack Trace</h5>
+    <div class="mb-5">
+      <code style="background-color: whitesmoke;">
+        {{error.details}}
+      </code>
+    </div>
+  </ng-container>
+</div>
