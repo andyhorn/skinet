@@ -20,9 +20,9 @@
     >Errors</a>
   </nav>
   <div class="d-flex align-items-center">
-    <a class="position-relative">
+    <a class="position-relative" routerLink="/basket">
       <i class="fa fa-shopping-cart fa-2x me-5 text-dark"></i>
-      <div class="cart-no">5</div>
+      <div class="cart-no">{{ itemCount | async }}</div>
     </a>
     <a href="#" class="btn btn-outline-secondary me-2">Login</a>
     <a href="#" class="btn btn-outline-secondary me-3">Sign up</a>
