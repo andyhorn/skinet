@@ -8,6 +8,7 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace API.Controllers
 {
@@ -16,6 +17,9 @@ namespace API.Controllers
     IMapper mapper,
     ITokenService tokenService) : BaseApiController
   {
+
+    static private readonly string EmailInUseError = "Email address is in use";
+
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
@@ -97,6 +101,14 @@ namespace API.Controllers
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto dto)
     {
+      if (CheckEmailExistsAsync(dto.Email).Result.Value)
+      {
+        return new BadRequestObjectResult(new ApiValidationErrorResponse()
+        {
+          Errors = new[] { EmailInUseError },
+        });
+      }
+
       var user = new AppUser()
       {
         DisplayName = dto.DisplayName,

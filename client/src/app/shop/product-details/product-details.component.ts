@@ -68,7 +68,7 @@ export class ProductDetailsComponent implements OnInit {
         next: (response) => {
           this.product = response;
           this.breadcrumbService.set('@productDetails', this.product.name);
-          this.basketService.basketSource$.pipe(take(1)).subscribe({
+          this.basketService.basket$.pipe(take(1)).subscribe({
             next: (basket) => {
               const item = basket?.items.find((i) => i.id == +productId);
 

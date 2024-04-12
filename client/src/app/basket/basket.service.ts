@@ -6,19 +6,19 @@ import { HttpClient } from '@angular/common/http';
 import { Product } from '../shared/models/product';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BasketService {
   private readonly baseUrl = environment.apiUrl;
   private readonly basketSource = new BehaviorSubject<Basket | null>(null);
-  private readonly basketTotalSource = new BehaviorSubject<BasketTotals | null>(null);
+  private readonly basketTotalSource = new BehaviorSubject<BasketTotals | null>(
+    null
+  );
 
-  public readonly basketSource$ = this.basketSource.asObservable();
-  public readonly basketTotalSource$ = this.basketTotalSource.asObservable();
+  public readonly basket$ = this.basketSource.asObservable();
+  public readonly basketTotal$ = this.basketTotalSource.asObservable();
 
-  constructor(
-    private readonly http: HttpClient,
-  ) { }
+  constructor(private readonly http: HttpClient) {}
 
   public getBasket(id: string): void {
     this.http.get<Basket>(`${this.baseUrl}basket?id=${id}`).subscribe({
@@ -73,8 +73,12 @@ export class BasketService {
     });
   }
 
-  private addOrUpdateItems(items: BasketItem[], basketItem: BasketItem, qty: number): BasketItem[] {
-    const item = items.find(i => i.id === basketItem.id);
+  private addOrUpdateItems(
+    items: BasketItem[],
+    basketItem: BasketItem,
+    qty: number
+  ): BasketItem[] {
+    const item = items.find((i) => i.id === basketItem.id);
 
     if (item) {
       item.quantity += qty;
@@ -86,15 +90,19 @@ export class BasketService {
     return items;
   }
 
-  private removeOrUpdateItem(items: BasketItem[], id: number, qty: number): BasketItem[] {
-    const item = items.find(i => i.id === id);
+  private removeOrUpdateItem(
+    items: BasketItem[],
+    id: number,
+    qty: number
+  ): BasketItem[] {
+    const item = items.find((i) => i.id === id);
 
     if (!item) {
       return items;
     }
 
     if (item.quantity <= qty) {
-      items = items.filter(i => i.id !== id);
+      items = items.filter((i) => i.id !== id);
     } else {
       item.quantity -= qty;
     }
@@ -128,14 +136,17 @@ export class BasketService {
     }
 
     const shipping = 0;
-    const subtotal = basket.items.reduce((sum, item) => sum += (item.price * item.quantity), 0);
+    const subtotal = basket.items.reduce(
+      (sum, item) => (sum += item.price * item.quantity),
+      0
+    );
     const total = shipping + subtotal;
 
     this.basketTotalSource.next({
       shipping,
       subtotal,
-      total
-    })
+      total,
+    });
   }
 
   private isProduct(item: Product | BasketItem): item is Product {

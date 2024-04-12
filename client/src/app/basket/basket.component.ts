@@ -6,16 +6,14 @@ import { BasketItem } from '../shared/models/basket';
 @Component({
   selector: 'app-basket',
   templateUrl: './basket.component.html',
-  styleUrls: ['./basket.component.scss']
+  styleUrls: ['./basket.component.scss'],
 })
 export class BasketComponent {
   public readonly items$: Observable<BasketItem[]>;
 
-  constructor(
-    private readonly basketService: BasketService
-  ) {
-    this.items$ = this.basketService.basketSource$.pipe(
-      map(basket => basket?.items ?? []),
+  constructor(private readonly basketService: BasketService) {
+    this.items$ = this.basketService.basket$.pipe(
+      map((basket) => basket?.items ?? [])
     );
   }
 
